@@ -46,7 +46,7 @@ Fork元のリポジトリは https://github.com/kazuhito-m/java-odf-edit-sample
 - ブラウザからURLを指定
     + [http://localhost:8080](http://localhost:8080)
 
-### Test
+### Unit Test
 
 ```
 ./gradlew clean test
