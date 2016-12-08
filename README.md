@@ -1,18 +1,21 @@
-"OpenDocument Spreadsheet" edit sample by Java
+第08回大阪Jenkins勉強会「Jenkins & Docker」デプロイ用サンプルアプリ
 ==============================================
-
-OpenDocument Spreadsheetを使った「帳票テンプレート」サンプルアプリ
-
-## Latest integration
-
-+ Wercker : [![wercker status](https://app.wercker.com/status/220acd08eb808b9ba686d1130ae5d1bd/s/ "wercker status")](https://app.wercker.com/project/byKey/220acd08eb808b9ba686d1130ae5d1bd)
 
 ## What's this ?
 
-「[第13回関西LibreOffice勉強会](http://connpass.com/event/40278/)」の「[むしゃくしゃしたのでOpenDocumentで帳票テンプレート](http://www.slideshare.net/miurakazuhito/opendocument-13libreoffice-libokansai)」のデモで使用したサンプルアプリケーションです。
 
-基本的には「OpenDocument Spreadsheet(Libre Officeのドキュメント)をプログラム(Java)から操作する例」ですが、
-以下のファクタを利用したサンプル例だったりします。
+「[Jenkins勉強会大阪第08回](https://connpass.com/event/44408/)」の「[「JenkinsとDockerって何が良いの？ 〜言うてる俺もわからんわ〜]()」のデモで使用したサンプルアプリケーションです。
+
+
+---
+
+元の名前は `OpenDocument Spreadsheet" edit sample by Java`。
+
+OpenDocument Spreadsheetを使った「帳票テンプレート」サンプルアプリをFork/改造したもの。
+
+Fork元のリポジトリは https://github.com/kazuhito-m/java-odf-edit-sample
+
+以下のファクタを利用している。
 
 - JOpenDocument(Javaのライブラリ)
 - Spring boot
@@ -21,6 +24,8 @@ OpenDocument Spreadsheetを使った「帳票テンプレート」サンプル�
 - Flyway(DBマイグレーションツール)
 - Lombok
 - Twitter Bootstrap
+- Selenid
+- Jenkinsfile
 
 ## Usage
 
@@ -44,8 +49,15 @@ OpenDocument Spreadsheetを使った「帳票テンプレート」サンプル�
 ### Test
 
 ```
-./gradlew clean check
+./gradlew clean test
 ```
+
+### UI Test(Integration Test)
+
+```
+./gradlew clean integrationTest
+```
+
 
 ## Author
 

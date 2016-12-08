@@ -16,7 +16,7 @@ apply plugin: 'eclipse'
 apply from: 'https://raw.github.com/brunodecarvalho/gradle-plugins/master/integration-test.gradle'
 
 jar {
-    baseName = 'java-odf-edit-sample'
+    baseName = 'studyosaka8-jenkins-docker-app'
     version = '0.0.1-SNAPSHOT'
     manifest {
         attributes 'Implementation-Title': baseName, 'Implementation-Version': version
