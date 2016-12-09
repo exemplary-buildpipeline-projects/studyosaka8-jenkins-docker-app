@@ -4,8 +4,13 @@ node {
         parallel java8: {
             unitTest('java:openjdk-8')
         }, java9: {
-            unitTest('oracle-java9-plus')
+//            unitTest('oracle-java9-plus')
+            echo '９はスキップ'
         }
+    }
+
+    stage('残骸の確認') {
+        sh 'find ./'
     }
 
 }
