@@ -21,6 +21,10 @@ def unitTest(containerImage) {
       checkout scm
       // Unit test
       sh './gradlew clean test'
+
+      echo 'テストレポートが拾えないみたいなので、確認'
+      sh 'find ./'
+
       // JUnitテストレポートを保存
       step([$class: 'JUnitResultArchiver', testResults: '**/build/test-results/*.xml'])
     }
