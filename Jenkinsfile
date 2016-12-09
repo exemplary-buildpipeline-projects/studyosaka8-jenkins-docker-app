@@ -24,8 +24,17 @@ node {
 
     stage('残骸の確認２') {
         sh 'find ./'
+        sh 'ls -l ./build/libs'
     }
 
+    stage('UI(Integration) Test') {
+        docker.image('java:openjdk-8').inside("-u root") {
+            // Checkout
+            checkout scm
+            // jar build (TestはSkip)
+            sh './gradlew clean build -Dskip.tests=true'
+        }
+    }
 
 
 
@@ -38,7 +47,7 @@ def unitTest(containerImage) {
 
         // ディレクトリを共有するっぽいので、被らないように「Container毎のDir」を作成。
         sh "mkdir -p ${containerImage}"
-        dir("./${containerImage}) {
+        dir("./${containerImage}") {
             // Checkout
             checkout scm
             // Unit test
@@ -46,7 +55,7 @@ def unitTest(containerImage) {
 
             // FIXME なぜかここで「そんなファイルはない」と怒られ、死ぬ。用調査。
             // JUnitテストレポートを保存
-          // step([$class: 'JUnitResultArchiver', testResults: './build/test-results/**.xml'])
+            // step([$class: 'JUnitResultArchiver', testResults: './build/test-results/**.xml'])
         }
 
     }
