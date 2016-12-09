@@ -13,7 +13,7 @@ node {
         sh 'find ./'
     }
 
-    staget('Binary(jar) Build') {
+    stage('Binary(jar) Build') {
         docker.image(containerImage).inside("-u root") {
             // Checkout
             checkout scm
@@ -30,6 +30,8 @@ node {
 
 }
 
+// Unit Test部分
+// 引数は「実行したいDockerImage名」
 def unitTest(containerImage) {
     docker.image(containerImage).inside("-u root") {
         // Checkout
