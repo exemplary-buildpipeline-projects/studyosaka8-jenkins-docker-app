@@ -10,6 +10,7 @@ node {
     // ２つの言語バージョンでUnitTest
     stage('Unit Test(Multi version)') {
         parallel java8: {
+            sleep 60  // プロセス分けてるくせに競合する…ため、ちょっとマを開ける。
             unitTest('java:openjdk-8')
         }, java9: {
             unitTest('oracle-java9-plus')
