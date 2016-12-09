@@ -14,7 +14,7 @@ node {
     }
 
     stage('Binary(jar) Build') {
-        docker.image(containerImage).inside("-u root") {
+        docker.image('java:openjdk-8').inside("-u root") {
             // Checkout
             checkout scm
             // jar build (TestはSkip)
@@ -28,19 +28,26 @@ node {
 
 
 
+
 }
 
 // Unit Test部分
 // 引数は「実行したいDockerImage名」
 def unitTest(containerImage) {
     docker.image(containerImage).inside("-u root") {
-        // Checkout
-        checkout scm
-        // Unit test
-        sh './gradlew clean test'
 
-        // FIXME なぜかここで「そんなファイルはない」と怒られ、死ぬ。用調査。
-        // JUnitテストレポートを保存
-        // step([$class: 'JUnitResultArchiver', testResults: './build/test-results/**.xml'])
+        // ディレクトリを共有するっぽいので、被らないように「Container毎のDir」を作成。
+        sh "mkdir -p ${containerImage}"
+        dir("./${containerImage}) {
+            // Checkout
+            checkout scm
+            // Unit test
+            sh './gradlew clean test'
+
+            // FIXME なぜかここで「そんなファイルはない」と怒られ、死ぬ。用調査。
+            // JUnitテストレポートを保存
+          // step([$class: 'JUnitResultArchiver', testResults: './build/test-results/**.xml'])
+        }
+
     }
 }
