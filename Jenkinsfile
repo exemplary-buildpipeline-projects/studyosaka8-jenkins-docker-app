@@ -13,19 +13,32 @@ node {
         sh 'find ./'
     }
 
+    staget('Binary(jar) Build') {
+        docker.image(containerImage).inside("-u root") {
+            // Checkout
+            checkout scm
+            // jar build (TestはSkip)
+            sh './gradlew clean build -Dskip.tests=true'
+        }
+    }
+
+    stage('残骸の確認２') {
+        sh 'find ./'
+    }
+
+
+
 }
 
 def unitTest(containerImage) {
     docker.image(containerImage).inside("-u root") {
-      // Checkout
-      checkout scm
-      // Unit test
-      sh './gradlew clean test'
+        // Checkout
+        checkout scm
+        // Unit test
+        sh './gradlew clean test'
 
-      echo 'テストレポートが拾えないみたいなので、確認'
-      sh 'find ./'
-
-      // JUnitテストレポートを保存
-      step([$class: 'JUnitResultArchiver', testResults: './build/test-results/**.xml'])
+        // FIXME なぜかここで「そんなファイルはない」と怒られ、死ぬ。用調査。
+        // JUnitテストレポートを保存
+        // step([$class: 'JUnitResultArchiver', testResults: './build/test-results/**.xml'])
     }
 }
