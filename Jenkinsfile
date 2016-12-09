@@ -1,6 +1,8 @@
 node {
 
     stage('Soruce checkout)') {
+        // 念の為 ドット始まり(.git含む) 以外のファイルを削除しておく。
+        sh 'rm -rf ./'
         // Checkout
         checkout scm
     }
@@ -10,8 +12,7 @@ node {
         parallel java8: {
             unitTest('java:openjdk-8')
         }, java9: {
-            echo 'test'
-            // unitTest('oracle-java9-plus')
+            unitTest('oracle-java9-plus')
         }
     }
 
@@ -38,17 +39,32 @@ node {
         // Seleniumサーバが立ってるかを確認し、無いようなら再度起動する。
         // TODO 実装
 
+        // SeleniumサーバのIPを取得する。
+        def seleniumServerIp = getIpAddressByContainerName('selenium')
+        echo "seleniumServerIp : ${seleniumServerIp}"
+
+        // ファイルが在るか？チェック(戻り値が0でなくば死ぬのを利用して)
+        sh 'ls -l ./build/libs/*.jar'
+
         // まず、コンテナ立ててそこにデプロイする。
+        sh "docker rm -f deploy-app || echo 'container allrady clearad.'"
+        sh 'docker run -d --name deploy-app -v $PWD/build/libs:/tmp/app_import deploy-target'
+        // 今建てたデプロイ用コンテナのIPを取得する。
+        def uiTestServerIp = getIpAddressByContainerName('deploy-app')
+        echo "uiTestServerIp : ${uiTestServerIp}"
 
+        // インテグレーションテストを(Docekrの中で)回す。
         docker.image('java:openjdk-8').inside("-u root") {
-            // Checkout
-            checkout scm
-            // jar build (TestはSkip)
-            sh './gradlew clean build -Dskip.tests=true'
+            // UI Test
+            sh "./gradlew integrationTest -Dit.appRootUrl=http://${uiTestServerIp}:8080/ -Dit.seleniumeRemoteDriverUrl=http://${seleniumServerIp}:24444//wd/hub"
         }
+
+        // TODO テストが失敗しても、コンテナ殺すハンドリング。
+
+        // テストが終わったので、デプロイしたサーバは殺す。
+        sh "docker rm -f deploy-app || echo 'container allrady clearad.'"
+
     }
-
-
 
 }
 
@@ -67,4 +83,12 @@ def unitTest(containerImage) {
             // step([$class: 'JUnitResultArchiver', testResults: './build/test-results/**.xml'])
         }
     }
+}
+
+// Dockerのコンテナ名から、IPAddressを割り出す。
+def getIpAddressByContainerName(name) {
+    return sh (
+        script:  "docker inspect --format '{{ .NetworkSettings.IPAddress }}' ${name}"
+        ,returnStdout: true
+    )
 }
