@@ -26,6 +26,6 @@ def unitTest(containerImage) {
       sh 'find ./'
 
       // JUnitテストレポートを保存
-      step([$class: 'JUnitResultArchiver', testResults: '**/build/test-results/*.xml'])
+      step([$class: 'JUnitResultArchiver', testResults: './build/test-results/**.xml'])
     }
 }
