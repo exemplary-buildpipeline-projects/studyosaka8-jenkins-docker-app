@@ -2,7 +2,7 @@ node {
 
     stage('Soruce checkout)') {
         // 念の為 ドット始まり(.git含む) 以外のファイルを削除しておく。
-        sh 'rm -rf ./*'
+        sh 'sudo rm -rf ./*'
         // Checkout
         checkout scm
     }
