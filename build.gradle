@@ -32,9 +32,14 @@ compileJava.dependsOn processResources
 compileJava.options.compilerArgs = ['-Adoma.dao.subpackage=impl', '-Adoma.dao.suffix=Impl']
 
 // Test skip 可能設定。
-def testOn = ! Boolean.getBoolean('skip.tests') 
+def testOn = !Boolean.getBoolean('skip.tests')
 test.onlyIf { testOn }
 integrationTest.onlyIf { testOn }
+
+// テスト時に引数をプログラム中からも拾えるように。
+tasks.withType(Test) {
+    systemProperties System.properties
+}
 
 eclipse {
     jdt {

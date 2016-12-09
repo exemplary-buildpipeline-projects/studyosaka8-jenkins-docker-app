@@ -8,6 +8,8 @@ import org.openqa.selenium.By;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.MalformedURLException;
+
 import static com.codeborne.selenide.Selenide.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -20,7 +22,7 @@ public class WorkresultPageTest {
     private static final Logger logger = LoggerFactory.getLogger(WorkresultPageTest.class);
 
     @Before
-    public void setUp() {
+    public void setUp() throws MalformedURLException {
         // Selenideに「自作のFirefoxドライバー」をセット。
         WebDriverRunner.setWebDriver(FirefoxWebDriverFactroy.create());
     }
