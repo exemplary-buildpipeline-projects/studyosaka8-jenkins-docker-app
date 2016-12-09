@@ -1,11 +1,15 @@
 node {
 
+    stage('残骸の確認０') {
+        sh 'find ./'
+    }
+
+    // ２つの言語バージョンでUnitTest
     stage('Unit Test(Multi version)') {
         parallel java8: {
             unitTest('java:openjdk-8')
         }, java9: {
-//            unitTest('oracle-java9-plus')
-            echo '９はスキップ'
+            unitTest('oracle-java9-plus')
         }
     }
 
@@ -28,6 +32,12 @@ node {
     }
 
     stage('UI(Integration) Test') {
+
+        // Seleniumサーバが立ってるかを確認し、無いようなら再度起動する。
+
+
+        // まず、デプロイする。
+
         docker.image('java:openjdk-8').inside("-u root") {
             // Checkout
             checkout scm
@@ -45,18 +55,14 @@ node {
 def unitTest(containerImage) {
     docker.image(containerImage).inside("-u root") {
 
-        // ディレクトリを共有するっぽいので、被らないように「Container毎のDir」を作成。
-        sh "mkdir -p ${containerImage}"
-        dir("./${containerImage}") {
-            // Checkout
-            checkout scm
-            // Unit test
-            sh './gradlew clean test'
+        // Checkout
+        checkout scm
+        // Unit test
+        sh './gradlew clean test'
 
-            // FIXME なぜかここで「そんなファイルはない」と怒られ、死ぬ。用調査。
-            // JUnitテストレポートを保存
-            // step([$class: 'JUnitResultArchiver', testResults: './build/test-results/**.xml'])
-        }
+        // FIXME なぜかここで「そんなファイルはない」と怒られ、死ぬ。用調査。
+        // JUnitテストレポートを保存
+        // step([$class: 'JUnitResultArchiver', testResults: './build/test-results/**.xml'])
 
     }
 }
