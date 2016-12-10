@@ -10,9 +10,9 @@ node {
     // ２つの言語バージョンでUnitTest
     stage('Unit Test(Multi version)') {
         parallel java8: {
-            sleep 60  // プロセス分けてるくせに競合する…ため、ちょっとマを開ける。
             unitTest('java:openjdk-8')
         }, java9: {
+            sleep 120  // プロセス分けてるくせに競合する…ため、ちょっとマを開ける。
             unitTest('oracle-java9-plus')
         }
     }
@@ -64,6 +64,31 @@ node {
 
         // テストが終わったので、デプロイしたサーバは殺す。
         sh "docker rm -f deploy-app || echo 'container allrady clearad.'"
+
+    }
+
+    stage('Deploy test environemt(by Branch name)') {
+
+        // ブランチ名取得。
+        def branch = env.JOB_NAME.replaceAll(/.*\//,"")
+        // デプロイするコンテナ名を作成。
+        def deployContainerName = "app-${branch}"
+        echo "deployContainerName : ${deployContainerName}"
+
+        // ファイルが在るか？チェック(戻り値が0でなくば死ぬのを利用して)
+        sh 'ls -l ./build/libs/*.jar'
+
+        // デプロイサーバをコンテナで立てる。（もとから在るなら削除。）
+        sh "docker rm -f ${deployContainerName} || echo 'container allrady clearad.'"
+        sh 'docker run -d --name ${deployContainerName} -v $PWD/build/libs:/tmp/app_import deploy-target'
+
+        // 直近で建てたデプロイコンテナのIPを取得。
+        def deployContainerIp = getIpAddressByContainerName(deployContainerName)
+        echo "deployContainerIp : ${deployContainerIp}"
+
+        // nginxでリンクをはり、外から見れるようにする。
+        sh "sudo echo 'location /master { proxy_pass http://${deployContainerIp}:8080/; }' > /etc/nginx/default.d/${branch}.conf
+        sh "sudo service nginx reload"
 
     }
 
