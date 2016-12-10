@@ -109,5 +109,5 @@ def getIpAddressByContainerName(name) {
     return sh (
         script:  "docker inspect --format '{{ .NetworkSettings.IPAddress }}' ${name}"
         ,returnStdout: true
-    ).trim
+    ).trim()
 }
