@@ -88,7 +88,7 @@ node {
     }
 
     stage('Archive Documents') {
-        sh 'chmod -R 766 ./build'
+        sh 'sudo chmod -R 766 ./build'
         archiveArtifacts './build'
     }
 
