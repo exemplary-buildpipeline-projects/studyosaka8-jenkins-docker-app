@@ -8,18 +8,14 @@ node {
     }
 
     // ２つの言語バージョンでUnitTest
-    stage('Unit Test(Multi version)') {
-        parallel java8: {
-            unitTest('java:openjdk-8')
-        }, java9: {
-            sleep 120  // プロセス分けてるくせに競合する…ため、ちょっとマを開ける。
-            unitTest('oracle-java9-plus')
-        }
-    }
-
-    stage('残骸の確認') {
-        sh 'find ./'
-    }
+//    stage('Unit Test(Multi version)') {
+//        parallel java8: {
+//            unitTest('java:openjdk-8')
+//        }, java9: {
+//            sleep 120  // プロセス分けてるくせに競合する…ため、ちょっとマを開ける。
+//            unitTest('oracle-java9-plus')
+//        }
+//    }
 
     stage('Binary(jar) Build') {
         docker.image('java:openjdk-8').inside("-u root") {
@@ -28,11 +24,6 @@ node {
             // jar build (TestはSkip)
             sh './gradlew clean build -Dskip.tests=true'
         }
-    }
-
-    stage('残骸の確認２') {
-        sh 'find ./'
-        sh 'ls -l ./build/libs'
     }
 
     stage('UI(Integration) Test') {
@@ -57,7 +48,8 @@ node {
         // インテグレーションテストを(Docekrの中で)回す。
         docker.image('java:openjdk-8').inside("-u root") {
             // UI Test
-            sh "./gradlew integrationTest -Dit.appRootUrl=http://${uiTestServerIp}:8080/ -Dit.seleniumeRemoteDriverUrl=http://${seleniumServerIp}:24444//wd/hub"
+            def command = "./gradlew integrationTest -Dit.appRootUrl=http://${uiTestServerIp}:8080/ -Dit.seleniumeRemoteDriverUrl=http://${seleniumServerIp}:24444//wd/hub"
+            sh command
         }
 
         // TODO テストが失敗しても、コンテナ殺すハンドリング。
