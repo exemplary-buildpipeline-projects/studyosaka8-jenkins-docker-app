@@ -87,10 +87,11 @@ node {
 
     }
 
-    stage('Archive Documents') {
-        sh 'sudo chmod -R 766 ./build'
-        archiveArtifacts './build'
-    }
+    // FIXME なんでかドキュメントが吸えないので、後で治す。
+//    stage('Archive Documents') {
+//        sh 'sudo chmod -R 766 ./build'
+//        archiveArtifacts './build'
+//    }
 
 }
 
