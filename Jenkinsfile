@@ -73,7 +73,7 @@ node {
 
         // デプロイサーバをコンテナで立てる。（もとから在るなら削除。）
         sh "docker rm -f ${deployContainerName} || echo 'container allrady clearad.'"
-        sh "docker run -d --name ${deployContainerName} -v $PWD/build/libs:/tmp/app_import deploy-target"
+        sh "docker run -d --name ${deployContainerName} -v `pwd`/build/libs:/tmp/app_import deploy-target"
 
         // 直近で建てたデプロイコンテナのIPを取得。
         def deployContainerIp = getIpAddressByContainerName(deployContainerName)
