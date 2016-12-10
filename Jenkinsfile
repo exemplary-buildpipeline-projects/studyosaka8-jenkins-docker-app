@@ -87,6 +87,10 @@ node {
 
     }
 
+    stage('Archive Documents') {
+        archiveArtifacts './build'
+    }
+
 }
 
 // Unit Test部分
