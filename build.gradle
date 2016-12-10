@@ -17,7 +17,7 @@ apply from: 'https://raw.github.com/brunodecarvalho/gradle-plugins/master/integr
 
 jar {
     baseName = 'studyosaka8-jenkins-docker-app'
-    version = '0.0.1-SNAPSHOT'
+    version = '0.0.1'
     manifest {
         attributes 'Implementation-Title': baseName, 'Implementation-Version': version
     }
