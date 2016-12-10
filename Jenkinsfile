@@ -8,14 +8,14 @@ node {
     }
 
     // ２つの言語バージョンでUnitTest
-//    stage('Unit Test(Multi version)') {
-//        parallel java8: {
-//            unitTest('java:openjdk-8')
-//        }, java9: {
-//            sleep 120  // プロセス分けてるくせに競合する…ため、ちょっとマを開ける。
-//            unitTest('oracle-java9-plus')
-//        }
-//    }
+    stage('Unit Test(Multi version)') {
+        parallel java8: {
+            unitTest('java:openjdk-8')
+        }, java9: {
+            sleep 120  // プロセス分けてるくせに競合する…ため、ちょっとマを開ける。
+            unitTest('oracle-java9-plus')
+        }
+    }
 
     stage('Binary(jar) Build') {
         docker.image('java:openjdk-8').inside("-u root") {
