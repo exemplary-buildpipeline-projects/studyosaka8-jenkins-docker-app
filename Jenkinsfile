@@ -87,7 +87,7 @@ node {
         echo "deployContainerIp : ${deployContainerIp}"
 
         // nginxでリンクをはり、外から見れるようにする。
-        sh "sudo echo 'location /master { proxy_pass http://${deployContainerIp}:8080/; }' > /etc/nginx/default.d/${branch}.conf
+        sh "sudo echo 'location /master { proxy_pass http://${deployContainerIp}:8080/; }' > /etc/nginx/default.d/${branch}.conf"
         sh "sudo service nginx reload"
 
     }
