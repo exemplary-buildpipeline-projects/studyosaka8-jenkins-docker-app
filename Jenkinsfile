@@ -87,6 +87,11 @@ node {
 
     }
 
+    stage('Archive Documents') {
+        sh 'sudo chmod -R 766 ./build'
+        archiveArtifacts './build'
+    }
+
 }
 
 // Unit Test部分
