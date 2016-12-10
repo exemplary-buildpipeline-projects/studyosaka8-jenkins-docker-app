@@ -82,7 +82,7 @@ node {
         // nginxでリンクをはり、外から見れるようにする。
         sh "sudo touch /etc/nginx/default.d/${branch}.conf"
         sh "sudo chmod 766 /etc/nginx/default.d/${branch}.conf"
-        sh "echo 'location /master { proxy_pass http://${deployContainerIp}:8080/; }' > /etc/nginx/default.d/${branch}.conf"
+        sh "echo 'location /${branch} { proxy_pass http://${deployContainerIp}:8080/; }' > /etc/nginx/default.d/${branch}.conf"
         sh "sudo service nginx reload"
 
     }
