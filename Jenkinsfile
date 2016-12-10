@@ -1,6 +1,6 @@
 node {
 
-    stage('Soruce checkout)') {
+    stage('Soruce checkout') {
         // 念の為 ドット始まり(.git含む) 以外のファイルを削除しておく。
         sh 'sudo rm -rf ./*'
         // Checkout
@@ -26,7 +26,7 @@ node {
         }
     }
 
-    stage('UI(Integration) Test') {
+    stage('UI Test') {
 
         // Seleniumサーバが立ってるかを確認し、無いようなら再度起動する。
         // TODO 実装
