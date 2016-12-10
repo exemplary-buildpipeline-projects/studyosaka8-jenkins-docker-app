@@ -49,6 +49,7 @@ node {
         docker.image('java:openjdk-8').inside("-u root") {
             // UI Test
             def command = "./gradlew integrationTest -Dit.appRootUrl=http://${uiTestServerIp}:8080/ -Dit.seleniumeRemoteDriverUrl=http://${seleniumServerIp}:24444//wd/hub"
+            echo "command : " + command
             sh command
         }
 
