@@ -12,7 +12,7 @@ node {
         parallel java8: {
             unitTest('java:openjdk-8')
         }, java9: {
-            sleep 180  // プロセス分けてるくせに競合する…ため、ちょっとマを開ける。
+            sleep 150  // プロセス分けてるくせに競合する…ため、ちょっとマを開ける。
             unitTest('oracle-java9-plus')
         }
     }
