@@ -9,7 +9,7 @@
 
 ---
 
-元の名前は `OpenDocument Spreadsheet" edit sample by Java`。
+元の名前は `"OpenDocument Spreadsheet" edit sample by Java`。
 
 OpenDocument Spreadsheetを使った「帳票テンプレート」サンプルアプリをFork/改造したもの。
 
