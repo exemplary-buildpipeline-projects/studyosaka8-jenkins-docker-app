@@ -3,10 +3,10 @@
 <head>
     <title>OpenDocument Spreadsheet "Report Template" Samples</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link href="css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="css/bootstrap-responsive.min.css" rel="stylesheet"/>
-    <link href="css/layout.css" rel="stylesheet"/>
-    <link href="css/prettify.css" rel="stylesheet"/>
+    <link th:href="@{css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{css/bootstrap-responsive.min.css}" rel="stylesheet"/>
+    <link th:href="@{css/layout.css}" rel="stylesheet"/>
+    <link th:href="@{css/prettify.css}" rel="stylesheet"/>
     <style type="text/css">body {padding: 5px 0 5px 0;}</style>
     <script src="http://code.jquery.com/jquery.js"></script>
 </head>
@@ -87,12 +87,17 @@ $(function($) {
     $('#dllink').on('click',function(event) {
         const form = document.wrcond;
         const real = form.action; // われながら最悪なソースだと思ふ…
-        form.action='/dlworkresult';
+        form.action = real.replace('/workresult' , '/dlworkresult');
         form.submit();
         form.action = real;
         return false;
     });
 });
+
+
+
+
+
 </script>
 
 </body>
